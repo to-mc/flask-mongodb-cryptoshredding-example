@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>MongoDB CryptoShredding Example</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+</head>
+
+<body>
+    <div class="topnav">
+        <a href="{{ url_for('home') }}">Home</a>
+        {% if current_user.is_authenticated %}
+        <a href="{{ url_for('admin') }}">Admin</a>
+
+        {% else %}
+        <a href="{{ url_for('login') }}">Login</a>
+        <a href="{{ url_for('signup') }}">Sign Up</a>
+        {% endif %}
+        {% if current_user.is_authenticated %}
+        <div class="topnav-right">
+            <a href="{{ url_for('logout') }}">Logout {{ current_user.username }}</a>
+        </div>
+        {% endif %}
+    </div>
+
+    <hr>
+    <div class="content">
+        {% for category, message in get_flashed_messages(with_categories=True) %}
+        <div class="alert alert-{{category}}">{{ message }}</div>
+        {% endfor %}
+        {% block content %} {% endblock %}
+    </div>
+</body>
+
+</html>

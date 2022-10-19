@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% from "_formhelpers.html" import render_field %}
+
+{% block content %}
+
+{% if user_preferences %}
+<div class="container">
+  <h1>Existing data</h1>
+  <table class="dataTable">
+    <tr>
+      <th>Key</th>
+      <th>Value</th>
+    </tr>
+    {% for userpref in user_preferences %}
+    <tr>
+      <td>{{ userpref.key }}</td>
+      <td>{{ userpref.value }}</td>
+      <td>
+        <form method="post" action={{ url_for('delete') }}>
+          <input type="hidden" value={{userpref._id}} name="userpref_id" />
+          <input type="submit" value="delete" class="deleteButton" />
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+{% else %}
+<div class="container">
+  <h2>No data yet!</h2>
+</div>
+{% endif %}
+
+<div class="container">
+  <h1>Add some data</h1>
+  <form method=post>
+    <dl>
+      {{ form.csrf_token }}
+      {{ render_field(form.key) }}
+      {{ render_field(form.value) }}
+      {{ form.submit() }}
+    </dl>
+  </form>
+</div>
+{% endblock %}

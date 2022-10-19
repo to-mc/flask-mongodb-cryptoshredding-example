@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% from "_formhelpers.html" import render_field %}
+
+{% block content %}
+<div class="container">
+  <h1>Login</h1>
+  <form method=post>
+    <dl>
+      {{ form.csrf_token }}
+      {{ render_field(form.username) }}
+      {{ render_field(form.password) }}
+      {{ form.submit() }}
+    </dl>
+  </form>
+</div>
+{% endblock %}
