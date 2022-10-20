@@ -9,7 +9,7 @@
       {{ form.csrf_token }}
       {{ render_field(form.username) }}
       {{ render_field(form.password) }}
-      {{ form.submit() }}
+      {{ render_field(form.submit, class="button")}}
     </dl>
   </form>
 </div>

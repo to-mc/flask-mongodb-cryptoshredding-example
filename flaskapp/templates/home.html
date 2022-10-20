@@ -10,6 +10,7 @@
     <tr>
       <th>Key</th>
       <th>Value</th>
+      <th>Actions</th>
     </tr>
     {% for userpref in user_preferences %}
     <tr>
@@ -18,7 +19,7 @@
       <td>
         <form method="post" action={{ url_for('delete') }}>
           <input type="hidden" value={{userpref._id}} name="userpref_id" />
-          <input type="submit" value="delete" class="deleteButton" />
+          <input type="submit" value="delete" class="button" />
         </form>
       </td>
     </tr>
@@ -38,7 +39,7 @@
       {{ form.csrf_token }}
       {{ render_field(form.key) }}
       {{ render_field(form.value) }}
-      {{ form.submit() }}
+      {{ render_field(form.submit, class="button")}}
     </dl>
   </form>
 </div>

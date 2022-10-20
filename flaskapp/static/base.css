@@ -1,6 +1,10 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
 .container {
     border-radius: 5px;
-    background-color: #f2f2f2;
+    background-color: #E3FCF7;
     padding: 20px;
     margin: 10px;
     border: 1px solid grey
@@ -16,13 +20,14 @@ select {
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
+    background-color: #F9EBFF;
 }
 
 
 input[type=button],
 input[type=submit],
 input[type=reset] {
-    background-color: #04AA6D;
+    background-color: #023430;
     border: none;
     color: white;
     padding: 16px 32px;
@@ -60,7 +65,7 @@ input[type=reset] {
 
 /* Add a black background color to the top navigation */
 .topnav {
-    background-color: #333;
+    background-color: #00684A;
     overflow: hidden;
 }
 
@@ -83,7 +88,7 @@ input[type=reset] {
 
 /* Change the color of links on hover */
 .topnav a:hover {
-    background-color: #ddd;
+    background-color: #00ED64;
     color: black;
 }
 
@@ -96,11 +101,9 @@ td {
 
 table {
     width: 100%;
+    background-color: #F9EBFF;
 }
 
-tr:nth-child(even) {
-    background-color: #f2f2f2;
-}
 
 th {
     height: 25px;
@@ -111,13 +114,8 @@ td {
     text-align: left;
 }
 
-.deleteButton {
-    width: 100px;
-    text-align: center;
-}
-
 .button {
-    background-color: #04AA6D;
+    background-color: #023430;
     border: none;
     color: white;
     padding: 16px 32px;
@@ -127,4 +125,8 @@ td {
     width: 20%;
     text-align: center;
     display: block;
+}
+
+.button:hover {
+    background-color: #00ED64;
 }
