@@ -4,34 +4,55 @@
 <head>
     <meta charset="UTF-8">
     <title>MongoDB CryptoShredding Example</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}">
+    <link href="http://fonts.cdnfonts.com/css/euclid-circular-a" rel="stylesheet">
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
 </head>
 
 <body>
-    <div class="topnav">
-        <a href="{{ url_for('home') }}">Home</a>
-        {% if current_user.is_authenticated %}
-        <a href="{{ url_for('admin') }}">Admin</a>
+    <nav class="navbar navbar-light navbar-expand-md justify-content-center py-2 shadow-sm">
+        <a href="/" class="navbar-brand w-50 mr-auto d-inline-block align-top"><img width="30"
+                src="{{ url_for('static', filename='img/leaf_logo.png') }}"> MongoDB CryptoShredding Example</a>
 
-        {% else %}
-        <a href="{{ url_for('login') }}">Login</a>
-        <a href="{{ url_for('signup') }}">Sign Up</a>
-        {% endif %}
-        {% if current_user.is_authenticated %}
-        <div class="topnav-right">
-            <a href="{{ url_for('logout') }}">Logout {{ current_user.username }}</a>
+        <div class="navbar-collapse collapse w-100">
+            <ul class="navbar-nav w-100 justify-content-center">
+                <li class="nav-item {{ 'active' if active_page == 'home' else '' }}"><a class="nav-link"
+                        href="{{ url_for('home') }}">Home</a></li>
+                {% if current_user.is_authenticated %}
+                <li class="nav-item {{ 'active' if active_page == 'admin' else '' }}"><a class="nav-link"
+                        href="{{ url_for('admin') }}">Admin</a></li>
+
+                {% else %}
+                <li class="nav-item {{ 'active' if active_page == 'login' else '' }}"><a class="nav-link"
+                        href="{{ url_for('login') }}">Login</a></li>
+                <li class="nav-item {{ 'active' if active_page == 'signup' else '' }}"><a class="nav-link"
+                        href="{{ url_for('signup') }}">Sign Up</a></li>
+                {% endif %}
+            </ul>
+            <ul class="navbar-nav w-100 justify-content-end">
+                {% if current_user.is_authenticated %}
+                <li class="nav-item"></li><a class="nav-link" href="{{ url_for('logout') }}">Logout
+                    {{ current_user.username }}</a></li>
+                {% endif %}
+            </ul>
+            </ul>
         </div>
-        {% endif %}
-    </div>
+    </nav>
+    <div class="container-fluid pt-5">
+        <div class="row">
+            <div class="col-6 mx-auto">
 
-    <hr>
-    <div class="content">
-        {% for category, message in get_flashed_messages(with_categories=True) %}
-        <div class="alert alert-{{category}}">{{ message }}</div>
-        {% endfor %}
+                {% for category, message in get_flashed_messages(with_categories=True) %}
+                <div role="alert" class="alert alert-{{category}}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        </div>
         {% block content %} {% endblock %}
+
     </div>
+    <script src="{{ url_for('static', filename='jquery-3.6.1.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='bootstrap.min.js') }}"></script>
 </body>
 
 </html>

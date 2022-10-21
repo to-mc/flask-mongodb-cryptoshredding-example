@@ -38,8 +38,12 @@ def home():
             "key": form.key.data,
             "value": form.value.data,
         }
-        db_queries.insert_preference_doc(document=document)
-        flash("Data added!", category="info")
+        try:
+            db_queries.insert_preference_doc(document=document)
+            flash("Data added!", category="info")
+        except pymongo.errors.EncryptionError as ex:
+            app.logger.exception(ex)
+            flash("Could not add new data, no encryption key found!", category="danger")
 
         return redirect(url_for("login"))
     try:
@@ -48,7 +52,7 @@ def home():
         )
     except pymongo.errors.EncryptionError as ex:
         app.logger.exception(ex)
-        flash("Encryption failure trying to retrieve data", category="error")
+        flash("Encryption failure trying to retrieve data", category="danger")
         user_preferences = []
 
     return render_template("home.html", form=form, user_preferences=user_preferences)
@@ -69,7 +73,7 @@ def login():
             login_user(user_obj, remember=True)
             return redirect(url_for("home"))
         else:
-            flash("Incorrect username or password", category="error")
+            flash("Incorrect username or password", category="danger")
             return redirect(url_for("login"))
 
     return render_template("login.html", form=form)
@@ -84,7 +88,7 @@ def signup():
         if username and password:
             user = app.mongodb[db_name].user.find_one({"username": username})
             if user:
-                flash("User already exists with that username")
+                flash("User already exists with that username", category="danger")
                 return redirect(url_for("login"))
             user = User.create_user(username=username, password=password)
             flash("User created, please log in", category="success")
@@ -101,13 +105,46 @@ def signup():
 @login_required
 def logout():
     logout_user()
+    flash("User logged out!", category="success")
     return redirect(url_for("login"))
 
 
 @app.route("/admin")
 @login_required
 def admin():
-    return render_template("admin.html")
+    admin_actions = [
+        {
+            "title": "Delete your encryption key",
+            "text": (
+                "This will delete <strong>only your encryption key</strong>, and can be used to"
+                " demonstrate that you will no longer be able to access your data that was"
+                " encrypted with the key."
+            ),
+            "link": url_for("shred_key"),
+        },
+        {
+            "title": "Delete user and encryption key",
+            "text": (
+                "Delete your user record from the database, as well as your encryption key. Your"
+                " data records will remain, but will be unreadable."
+            ),
+            "link": url_for("delete_user_and_key"),
+        },
+        {
+            "title": "Delete user",
+            "text": (
+                "Delete your user record from the database. Your data records will remain, and can"
+                " potentially be read as your encryption key still exists."
+            ),
+            "link": url_for("delete_user"),
+        },
+        {
+            "title": "Delete all your data",
+            "text": "Delete the data records you've added.",
+            "link": url_for("delete_user_data"),
+        },
+    ]
+    return render_template("admin.html", actions=admin_actions)
 
 
 @app.route("/shredKey")
@@ -115,7 +152,8 @@ def admin():
 def shred_key():
     app.mongodb_encryption_client.delete_key(id=current_user.dek_id)
     flash(
-        "Data encryption key has been deleted. Existing data will no longer be accessible once cache expires",
+        "Data encryption key has been deleted. Existing data will no longer be accessible once"
+        " cache expires",
         category="info",
     )
     return redirect(url_for("home"))
@@ -126,7 +164,7 @@ def delete_user():
     app.user_collection.delete_one({"username": current_user.username})
 
     flash(
-        f'User: "{current_user.username}" deleted',
+        f'User: "{current_user.username}" deleted and logged out',
         category="info",
     )
     logout_user()

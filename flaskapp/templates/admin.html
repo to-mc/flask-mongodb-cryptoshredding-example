@@ -1,10 +1,22 @@
 {% extends "base.html" %}
+{% set active_page = "admin" %}
 
 {% block content %}
-<div class="container">
-  <a class="button" href="{{url_for('shred_key') }}">Delete data encryption key</a>
-  <a class="button" href="{{url_for('delete_user') }}">Delete user</a>
-  <a class="button" href="{{url_for('delete_user_and_key') }}">Delete user and data encryption key</a>
-  <a class="button" href="{{url_for('delete_user_data') }}">Delete all data for user</a>
+<div class="row">
+  {% for action in actions %}
+  <div class="col-lg-3 mb-4">
+    <div class="card h-100">
+      <div class="card-body d-flex flex-column">
+        <h5 class="card-title pb-2">{{action.title}}</h5>
+        <div class="card-text pb-3">{{action.text|safe}}</div>
+
+        <div class="btn-group-vertical mt-auto">
+          <a class="btn btn-danger justify-content-center" href="{{ action.link }}">Do it!</a>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
 </div>
 {% endblock %}

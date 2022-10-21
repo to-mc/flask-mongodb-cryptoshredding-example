@@ -1,16 +1,21 @@
 {% extends "base.html" %}
+{% set active_page = "login" %}
 {% from "_formhelpers.html" import render_field %}
 
 {% block content %}
-<div class="container">
-  <h1>Login</h1>
-  <form method=post>
-    <dl>
-      {{ form.csrf_token }}
-      {{ render_field(form.username) }}
-      {{ render_field(form.password) }}
-      {{ render_field(form.submit, class="button")}}
-    </dl>
-  </form>
+<div class="col-lg-6 mx-auto">
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">Login</h5>
+      <div class="card-text mb-5 text-muted">Enter your username and password.
+      </div>
+      <form method=post class="form">
+        {{ form.csrf_token }}
+        {{ render_field(form.username) }}
+        {{ render_field(form.password) }}
+        {{ form.submit(class="btn btn-primary") }}
+      </form>
+    </div>
+  </div>
 </div>
 {% endblock %}

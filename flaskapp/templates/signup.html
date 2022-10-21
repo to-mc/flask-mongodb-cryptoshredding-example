@@ -1,17 +1,22 @@
 {% extends "base.html" %}
+{% set active_page = "signup" %}
 {% from "_formhelpers.html" import render_field %}
 
 {% block content %}
-<div class="container">
-  <h1>Sign Up</h1>
-  <form method=post>
-    <dl>
-      {{ form.csrf_token }}
-      {{ render_field(form.username) }}
-      {{ render_field(form.password) }}
-      {{ render_field(form.confirm) }}
-      {{ render_field(form.submit, class="button")}}
-    </dl>
-  </form>
+<div class="col-lg-6 mx-auto">
+  <div class="card">
+    <div class="card-body">
+      <h5 class="card-title">Sign Up</h5>
+      <div class="card-text mb-5 text-muted">Enter your details to create an account. We'll store a record of you in
+        MongoDB, and generate a data encryption key just for you.</div>
+      <form method=post>
+        {{ form.csrf_token }}
+        {{ render_field(form.username) }}
+        {{ render_field(form.password) }}
+        {{ render_field(form.confirm) }}
+        {{ form.submit(class="btn btn-primary") }}
+      </form>
+    </div>
+  </div>
 </div>
 {% endblock %}
