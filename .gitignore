@@ -4,3 +4,6 @@ __pycache__
 *.pid
 
 .vscode
+local_cred.txt
+aws-cli/local_atlas-kms-role-policy.json
+aws-cli/local_role-trust-policy.json

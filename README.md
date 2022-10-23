@@ -3,11 +3,18 @@
 ## Initial Setup
 
 ### AWS setup
-1. [Create a symmetric KMS key](https://docs.aws.amazon.com/kms/latest/developerguide/create-keys.html#create-symmetric-cmk).
+1. [Create a symmetric KMS key](https://docs.aws.amazon.com/kms/latest/developerguide/create-keys.
+html#create-symmetric-cmk).
+#### AWS Using CLI
+Create an AWS KMS master key (see aws-cli/kms.sh)
+
 2. [Create an AWS role that you have permissions to assume](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-user.html).
 ![image](./resources/create_role.png)
 3. Give the role permissions for `kms:Decrypt` and `kms:Decrypt` on the kms key you created in step 1.
 ![image](./resources/create_policy.png)
+#### AWS Using CLI
+create an AWS IAM role allowing this app to encrypt / decrypt data keys (see aws-cli/iam.sh)
+
 4. Create an Atlas cluster for application data.
 5. Optional: Create a separate cluster for the keyvault.
 6. Add database user in Atlas allowing access from the IAM role.
