@@ -7,9 +7,14 @@
     <div class="card">
       <div class="card-body d-flex flex-column">
         <h5 class="card-title pb-1">Welcome!</h5>
-        <div class="card-text">This demo provides an interface to signup a new user, which will trigger the generation
-          of a new data encryption key in the background. You can then login with this user, and start saving some data
-          into the database. We will store the data like this, in a collection named <code>data</code>:
+        <div class="card-text pb-4">This application demonstrates how you can use MongoDB's <a
+            href="https://www.mongodb.com/docs/manual/core/csfle/">client side field
+            level encryption</a> to effectively "forget" customer data.
+        </div>
+        <div class="card-text pb-4">
+          When you sign up a new user, a new data encryption key will be generated and linked to the user. When you log
+          in with this user, you can start adding data into the database. We'll use the generated encryption key to
+          encrypt the data you save. It will be stored in a collection called <code>data</code>, structured as such:
           <pre>
             <code>
 {
@@ -19,7 +24,10 @@
 }</code>
           </pre>
           Visit the admin page, where you can trigger a bunch of different actions to test - for example deleting the
-          data encryption key for your user. To get started, <a href="{{ url_for("signup") }}">sign up</a> with a user.
+          data encryption key for your user. Deleting the key means the data you added can no longer be decrypted. This
+          means the data can no longer be linked to your user, nor can its value be read.
+        </div>
+        <div class="card-text">To get started, <a href="{{ url_for("signup") }}">sign up</a> with a user.
         </div>
       </div>
     </div>
