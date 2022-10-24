@@ -87,11 +87,22 @@ def delete_all_data_for_user(username):
 
 
 def fetch_all_data_unencrypted(decrypt=False, skip=0, limit=20):
-    results = list(app.data_collection.find(limit=limit, skip=skip))
+    query = [
+        {
+            "$facet": {
+                "data": [{"$skip": skip}, {"$limit": limit}, {"$sort": {"_id": 1}}],
+                "count": [{"$group": {"_id": None, "total": {"$sum": 1}}}],
+            }
+        }
+    ]
+    agg_result = list(app.data_collection.aggregate(query))[0]
+    total_count = agg_result["count"][0]["total"]
+    results = list(agg_result["data"])
 
     if decrypt:
         for field in ENCRYPTED_FIELDS.keys():
             for result in results:
                 if result.get(field):
                     result[field], result["encryption_succeeded"] = decrypt_field(result[field])
-    return results
+
+    return results, total_count

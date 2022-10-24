@@ -20,4 +20,14 @@ table {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+
+}
+
+.truncate:active {
+    overflow: visible;
+    white-space: normal;
+}
+
+.documentIcon {
+    height: 50px;
 }

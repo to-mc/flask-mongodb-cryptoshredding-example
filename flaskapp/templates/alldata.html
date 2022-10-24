@@ -28,14 +28,14 @@
           </tr>
           {% endfor %}
         </table>
-        <p>Showing item {{ skip + 1 }} to {{ [limit+skip,limit + data|length]|min }}</p>
+        <p>Showing item {{ skip + 1 }}{{ ' to ' ~ (skip + data|length) if data|length > 1}} of {{ total_count }}</p>
         <ul class="pagination pagination-sm">
-          {% if skip %}
-          <li class="page-item"><a class="page-link" href="{{ url_for('fetch_all_data', skip=skip-limit) }}">Previous
+          {% if page > 1 %}
+          <li class="page-item"><a class="page-link" href="{{ url_for('fetch_all_data', page=page-1) }}">Previous
               page</a></li>
           {% endif %}
-          {% if data|length >= limit+skip %}
-          <li class="page-item"><a class="page-link" href="{{ url_for('fetch_all_data', skip=limit) }}">Next page</a>
+          {% if total_count > skip + data|length %}
+          <li class="page-item"><a class="page-link" href="{{ url_for('fetch_all_data', page=page+1) }}">Next page</a>
           </li>
           {% endif %}
         </ul>
