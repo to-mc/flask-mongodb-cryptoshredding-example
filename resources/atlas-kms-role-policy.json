@@ -1,0 +1,14 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [{
+        "Effect": "Allow",
+        "Action": [
+            "kms:Decrypt",
+            "kms:Encrypt",
+            "kms:DescribeKey"
+        ],
+        "Resource": [
+            "arn:aws:kms:<AWS_REGION>:<AWS_ACCOUNT_ID>:key/<YOUR_KMS_KEY_ID>"
+        ]
+    }]
+}

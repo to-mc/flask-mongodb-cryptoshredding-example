@@ -2,19 +2,17 @@
 
 ## Initial Setup
 
-### AWS setup
-1. [Create a symmetric KMS key](https://docs.aws.amazon.com/kms/latest/developerguide/create-keys.html#create-symmetric-cmk).
-2. [Create an AWS role that you have permissions to assume](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-user.html).
-![image](./resources/create_role.png)
-3. Give the role permissions for `kms:Decrypt` and `kms:Decrypt` on the kms key you created in step 1.
-![image](./resources/create_policy.png)
-4. Create an Atlas cluster for application data.
-5. Optional: Create a separate cluster for the keyvault.
-6. Add database user in Atlas allowing access from the IAM role.
+### AWS
+Follow the instructions in [AWS_Setup.md](./resources/AWS_Setup.md)
+
+### MongoDB Atlas
+1. Create an Atlas cluster for application data.
+2. Optional: Create a separate cluster for the keyvault.
+3. Add database user in Atlas allowing access from the IAM role.
 ![image](./resources/db_access.png)
 
 
-### Local Environment setup
+### Local Environment
 The application relies on environment variables for configuration. Set the below environment variables using `export VAR_NAME=value`. Alternatively, you can add the values to an env file with `VAR_NAME=value` on each line, and replace all of the `-e VAR_NAME` in the `docker run` command with `--env-file <your_env_file_path>`.
 
 | Env var | Description | Example | Required |
@@ -30,14 +28,10 @@ The application relies on environment variables for configuration. Set the below
 | FLASK_SECRET_KEY | Secret key for flask application session storage. Set to any random string.  | fHYPvv_g9ZN3xUV8LFTuVqenJ-4B_hWP-Ak9BV8LXaA | Yes
 
 
-### Run with Docker
+## Run the Application
 
 1. Build the docker image: `docker build --tag flask-mongodb-cryptoshredding-example:latest .`
 2. Run the docker image: 
 `docker run -dp 5000:5000 --name flask-mongodb-cryptoshredding -e AWS_ACCESS_KEY_ID -e AWS_SESSION_TOKEN -e AWS_DEFAULT_REGION -e AWS_SECRET_ACCESS_KEY -e FLASK_SECRET_KEY -e ATLAS_AWS_ROLE -e ATLAS_AWS_KMS_KEY -e ATLAS_CLUSTER_HOSTNAME -e ATLAS_KEYVAULT_CLUSTER_HOSTNAME flask-mongodb-cryptoshredding-example:latest`
-3. Access the running container on `http://localhost:5000`
-4. Optionally create some indexes to support the query patterns: `docker exec -it flask-mongodb-cryptoshredding flask --app flaskapp create-indexes`
-
-## Using the UI
-
-TODO
+3. Access the running container in your browser on `http://localhost:5000`
+4. Optionally create some indexes to support the query patterns (this requires the container to be running already): `docker exec -it flask-mongodb-cryptoshredding flask --app flaskapp create-indexes`
