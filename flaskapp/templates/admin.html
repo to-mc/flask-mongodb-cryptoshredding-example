@@ -9,10 +9,9 @@
       <div class="card-body d-flex flex-column">
         <h5 class="card-title pb-2">{{action.title}}</h5>
         <div class="card-text pb-3">{{action.text|safe}}</div>
-
         <div class="btn-group-vertical mt-auto">
-          <a class="btn btn-danger justify-content-center" href="{{ action.link }}">Do it!</a>
-
+          <a class="btn btn-{{action.btnclass|default("danger", true)}} justify-content-center"
+            href="{{ action.link }}">Do it!</a>
         </div>
       </div>
     </div>

@@ -1,51 +1,15 @@
 {% extends "base.html" %}
-{% from "_formhelpers.html" import render_field %}
 {% set active_page = "home" %}
 
 {% block content %}
-<div class="row mb-5">
-  <div class="col-lg-6 mx-auto">
-    <div class="card">
-      <div class="card-body d-flex flex-column">
-        {% if user_preferences %}
-        <h5 class="card-title pb-1"> <img class="" src="{{ url_for('static', filename='img/document.png') }}">
-          Entered data</h5>
-        <table class="table table-bordered">
-          <thead class="thead-dark">
-            <tr>
-              <th>Key</th>
-              <th>Value</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          {% for userpref in user_preferences %}
-          <tr>
-            <td>{{ userpref.key }}</td>
-            <td>{{ userpref.value }}</td>
-            <td>
-              <form method="post" action={{ url_for('delete') }}>
-                <input type="hidden" value={{userpref._id}} name="userpref_id" />
-                <input type="submit" value="delete" class="btn btn-primary" />
-              </form>
-            </td>
-          </tr>
-          {% endfor %}
-        </table>
-        {% else %}
-        <h5 class="card-title"><img src="{{ url_for('static', filename='img/document.png') }}"> No data yet!
-        </h5>
-        {% endif %}
-      </div>
-    </div>
-  </div>
-</div>
 <div class="row">
   <div class="col-lg-6 mx-auto">
     <div class="card">
       <div class="card-body d-flex flex-column">
-        <h5 class="card-title pb-1">Insert data</h5>
-        <div class="card-text text-muted">The data you insert will be stored in a collection called "data". We'll
-          store it like this:
+        <h5 class="card-title pb-1">Welcome!</h5>
+        <div class="card-text">This demo provides an interface to signup a new user, which will trigger the generation
+          of a new data encryption key in the background. You can then login with this user, and start saving some data
+          into the database. We will store the data like this, in a collection named <code>data</code>:
           <pre>
             <code>
 {
@@ -54,13 +18,9 @@
   "value": &lt;the value you enter (encrypted)&gt;
 }</code>
           </pre>
+          Visit the admin page, where you can trigger a bunch of different actions to test - for example deleting the
+          data encryption key for your user. To get started, <a href="{{ url_for("signup") }}">sign up</a> with a user.
         </div>
-        <form method=post>
-          {{ form.csrf_token }}
-          {{ render_field(form.key) }}
-          {{ render_field(form.value) }}
-          {{ form.submit(class="btn btn-primary mt-auto") }}
-        </form>
       </div>
     </div>
   </div>

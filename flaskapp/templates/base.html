@@ -6,20 +6,25 @@
     <title>MongoDB CryptoShredding Example</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}">
+    <link href="http://fonts.cdnfonts.com/css/source-code-pro" rel="stylesheet">
     <link href="http://fonts.cdnfonts.com/css/euclid-circular-a" rel="stylesheet">
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
 </head>
 
-<body>
+<body class="mb-5">
     <nav class="navbar navbar-light navbar-expand-md justify-content-center py-2 shadow-sm">
         <a href="/" class="navbar-brand w-50 mr-auto d-inline-block align-top"><img width="30"
-                src="{{ url_for('static', filename='img/leaf_logo.png') }}"> MongoDB CryptoShredding Example</a>
+                src="{{ url_for('static', filename='img/leaf_logo.png') }}"><span class="header pl-4">MongoDB
+                CryptoShredding
+                Example</span></a>
 
         <div class="navbar-collapse collapse w-100">
             <ul class="navbar-nav w-100 justify-content-center">
                 <li class="nav-item {{ 'active' if active_page == 'home' else '' }}"><a class="nav-link"
                         href="{{ url_for('home') }}">Home</a></li>
                 {% if current_user.is_authenticated %}
+                <li class="nav-item mx-3 {{ 'active' if active_page == 'user_data' else '' }}"><a class="nav-link"
+                        href="{{ url_for('user_data') }}">Your Data</a></li>
                 <li class="nav-item {{ 'active' if active_page == 'admin' else '' }}"><a class="nav-link"
                         href="{{ url_for('admin') }}">Admin</a></li>
 
@@ -41,7 +46,7 @@
     </nav>
     <div class="container-fluid pt-5">
         <div class="row">
-            <div class="col-6 mx-auto">
+            <div class="col-lg-6 mx-auto">
 
                 {% for category, message in get_flashed_messages(with_categories=True) %}
                 <div role="alert" class="alert alert-{{category}}">{{ message }}</div>

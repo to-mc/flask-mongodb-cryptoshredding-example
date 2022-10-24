@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% from "_formhelpers.html" import render_field %}
+{% set active_page = "home" %}
+
+{% block content %}
+<div class="row mb-5">
+  <div class="col-lg-6 mx-auto">
+    <div class="card">
+      <div class="card-body d-flex flex-column">
+        {% if data %}
+        <h5 class="card-title pb-1"> <img class="" src="{{ url_for('static', filename='img/document.png') }}">
+          Data for all users</h5>
+        <p>We tried to decrypt all the data regardless of which user it belongs to. Rows in green represent data we were
+          able to decrypt, and rows in red show data we can't decrypt as the data encryption key has been deleted.</p>
+        <table class="table table-bordered">
+          <thead class="thead-dark">
+            <tr>
+              <th>Username</th>
+              <th>Key</th>
+              <th>Value</th>
+            </tr>
+          </thead>
+          {% for item in data %}
+          <tr class="{{ 'bg-success' if item.encryption_succeeded else 'bg-danger' }}">
+            <td class="{{ 'truncate' if not item.encryption_succeeded }}">{{ item.username }}</td>
+            <td>{{ item.key }}</td>
+            <td class="{{ 'truncate' if not item.encryption_succeeded }}">{{ item.value }}</td>
+          </tr>
+          {% endfor %}
+        </table>
+        <p>Showing item {{ skip + 1 }} to {{ [limit+skip,limit + data|length]|min }}</p>
+        <ul class="pagination pagination-sm">
+          {% if skip %}
+          <li class="page-item"><a class="page-link" href="{{ url_for('fetch_all_data', skip=skip-limit) }}">Previous
+              page</a></li>
+          {% endif %}
+          {% if data|length >= limit+skip %}
+          <li class="page-item"><a class="page-link" href="{{ url_for('fetch_all_data', skip=limit) }}">Next page</a>
+          </li>
+          {% endif %}
+        </ul>
+        {% else %}
+        <h5 class="card-title"><img src="{{ url_for('static', filename='img/document.png') }}"> No data yet!
+        </h5>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

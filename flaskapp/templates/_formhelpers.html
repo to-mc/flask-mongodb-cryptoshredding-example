@@ -1,11 +1,23 @@
 {% macro render_field(field) %}
-<div class="form-group row">
-  {{ field.label(class="col-sm-3 text-nowrap") }}
-  {{ field(class="form-control col-sm-5" + (" is-invalid" if field.errors else ""), **kwargs)|safe }}
+{% if field.type == "BooleanField" %}
+<div class="form-check pb-3">
+  {{ field(class="form-check-input" + (" is-invalid" if field.errors else ""), **kwargs)|safe }}
+  {{ field.label(class="form-check-label") }}
   {% if field.errors %}
   {% for error in field.errors %}
   <div class="invalid-feedback">{{ error }}</div>
   {% endfor %}
   {% endif %}
 </div>
+{% else %}
+<div class="form-group">
+  {{ field.label() }}
+  {{ field(class="form-control" + (" is-invalid" if field.errors else ""), **kwargs)|safe }}
+  {% if field.errors %}
+  {% for error in field.errors %}
+  <div class="invalid-feedback">{{ error }}</div>
+  {% endfor %}
+  {% endif %}
+</div>
+{% endif %}
 {% endmacro %}

@@ -19,19 +19,23 @@ def load_user(user_id):
     return user
 
 
-@app.route("/deletePref", methods=["POST"])
+@app.route("/delete-single-item", methods=["POST"])
 @login_required
-def delete():
-    preference = request.form.get("userpref_id")
-    db_queries.delete_single_preference_doc(
-        query={"_id": ObjectId(preference), "username": current_user.username},
+def delete_single_item():
+    data_item = request.form.get("item_id")
+    result = db_queries.delete_single_data_item(
+        query={"_id": ObjectId(data_item), "username": current_user.username},
     )
-    return redirect(url_for("home"))
+    if result.deleted_count:
+        flash("Item deleted!", category="info")
+    else:
+        flash("Could not find item or its not owned by your user!", category="danger")
+    return redirect(url_for("user_data"))
 
 
-@app.route("/", methods=["GET", "POST"])
+@app.route("/user-data", methods=["GET", "POST"])
 @login_required
-def home():
+def user_data():
     form = forms.AddDataForm()
     if form.validate_on_submit():
         document = {
@@ -39,23 +43,28 @@ def home():
             "value": form.value.data,
         }
         try:
-            db_queries.insert_preference_doc(document=document)
-            flash("Data added!", category="info")
+            db_queries.insert_data(document=document)
+            flash("Item added!", category="info")
         except pymongo.errors.EncryptionError as ex:
             app.logger.exception(ex)
             flash("Could not add new data, no encryption key found!", category="danger")
 
-        return redirect(url_for("login"))
+        return redirect(url_for("user_data"))
     try:
-        user_preferences = db_queries.retrieve_preference_docs(
+        user_data = db_queries.query_data(
             query={"username": current_user.username},
         )
     except pymongo.errors.EncryptionError as ex:
         app.logger.exception(ex)
         flash("Encryption failure trying to retrieve data", category="danger")
-        user_preferences = []
+        user_data = []
 
-    return render_template("home.html", form=form, user_preferences=user_preferences)
+    return render_template("userdata.html", form=form, user_data=user_data)
+
+
+@app.route("/")
+def home():
+    return render_template("home.html")
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -70,8 +79,8 @@ def login():
         user = app.mongodb[db_name].user.find_one({"username": username})
         if user and User.validate_login(user["password_hash"], password):
             user_obj = User.build_user_from_db(user)
-            login_user(user_obj, remember=True)
-            return redirect(url_for("home"))
+            login_user(user_obj, remember=form.remember_me.data)
+            return redirect(url_for("user_data"))
         else:
             flash("Incorrect username or password", category="danger")
             return redirect(url_for("login"))
@@ -104,8 +113,9 @@ def signup():
 @app.route("/logout")
 @login_required
 def logout():
+    user = current_user.username
     logout_user()
-    flash("User logged out!", category="success")
+    flash(f"User {user} logged out", category="success")
     return redirect(url_for("login"))
 
 
@@ -114,40 +124,47 @@ def logout():
 def admin():
     admin_actions = [
         {
-            "title": "Delete your encryption key",
+            "title": "Fetch data for all users",
+            "text": "Show all the data added by any user",
+            "link": url_for("fetch_all_data"),
+            "btnclass": "primary",
+        },
+        {
+            "title": "Delete encryption key",
             "text": (
-                "This will delete <strong>only your encryption key</strong>, and can be used to"
-                " demonstrate that you will no longer be able to access your data that was"
-                " encrypted with the key."
+                "This will delete <strong>only the encryption key</strong> for the logged in user,"
+                " and can be used to demonstrate that you will no longer be able to access your"
+                " data that was encrypted with the key."
             ),
             "link": url_for("shred_key"),
         },
         {
             "title": "Delete user and encryption key",
             "text": (
-                "Delete your user record from the database, as well as your encryption key. Your"
-                " data records will remain, but will be unreadable."
+                "Delete the record for the logged in user from the database, as well as the"
+                " related encryption key. The data records will remain, but will be unreadable as"
+                " they can no longer be decrypted."
             ),
             "link": url_for("delete_user_and_key"),
         },
         {
             "title": "Delete user",
             "text": (
-                "Delete your user record from the database. Your data records will remain, and can"
-                " potentially be read as your encryption key still exists."
+                "Delete the record for the logged in user from the database. The data records"
+                " will remain, and can potentially be read as the encryption key still exists."
             ),
             "link": url_for("delete_user"),
         },
         {
-            "title": "Delete all your data",
-            "text": "Delete the data records you've added.",
+            "title": "Delete all data for user",
+            "text": "Delete the data records added by the logged in user.",
             "link": url_for("delete_user_data"),
         },
     ]
     return render_template("admin.html", actions=admin_actions)
 
 
-@app.route("/shredKey")
+@app.route("/delete-data-key")
 @login_required
 def shred_key():
     app.mongodb_encryption_client.delete_key(id=current_user.dek_id)
@@ -156,10 +173,10 @@ def shred_key():
         " cache expires",
         category="info",
     )
-    return redirect(url_for("home"))
+    return redirect(url_for("user_data"))
 
 
-@app.route("/deleteUser")
+@app.route("/delete-user")
 def delete_user():
     app.user_collection.delete_one({"username": current_user.username})
 
@@ -171,7 +188,7 @@ def delete_user():
     return redirect(url_for("home"))
 
 
-@app.route("/deleteUserAndKey")
+@app.route("/delete-user-and-key")
 def delete_user_and_key():
     app.user_collection.delete_one({"username": current_user.username})
     app.mongodb_encryption_client.delete_key(id=current_user.dek_id)
@@ -184,7 +201,7 @@ def delete_user_and_key():
     return redirect(url_for("home"))
 
 
-@app.route("/deleteUserData")
+@app.route("/delete-user-data")
 def delete_user_data():
     db_queries.delete_all_data_for_user(current_user.username)
 
@@ -193,3 +210,12 @@ def delete_user_data():
         category="info",
     )
     return redirect(url_for("admin"))
+
+
+@app.route("/fetch-all-data")
+def fetch_all_data():
+    limit = 20
+    skip = int(request.args.get("skip", 0))
+    data = db_queries.fetch_all_data_unencrypted(decrypt=True, skip=skip, limit=limit)
+
+    return render_template("alldata.html", data=data, skip=skip, limit=limit)
