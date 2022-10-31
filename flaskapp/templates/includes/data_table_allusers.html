@@ -1,0 +1,44 @@
+<div class="card shadow">
+    <div class="card-body d-flex flex-column">
+        {% if data %}
+        <h5 class="card-title pb-1"> <img class="documentIcon my-auto"
+                src="{{ url_for('static', filename='img/document.png') }}">
+            Data for all users</h5>
+        <p>We tried to decrypt all the data regardless of which user it belongs to. Rows in green represent data we were
+            able to decrypt, and rows in red show data we can't decrypt as the data encryption key has been deleted.</p>
+        <table class="table table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Username</th>
+                    <th>Key</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+            {% for item in data %}
+            <tr class="{{ 'bg-success' if item.encryption_succeeded else 'bg-danger' }}">
+                <td class="{{ 'truncate' if not item.encryption_succeeded }}">{{ item.username }}</td>
+                <td>{{ item.key }}</td>
+                <td class="{{ 'truncate' if not item.encryption_succeeded }}">{{ item.value }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        <p>Showing item {{ skip + 1 }}{{ ' to ' ~ (skip + data|length) if data|length > 1}} of {{ total_count }}</p>
+        <ul class="pagination pagination-sm">
+            {% if page > 1 %}
+            <li class="page-item"><a class="page-link" href="{{ url_for('fetch_all_data', page=page-1) }}">Previous
+                    page</a></li>
+            {% endif %}
+            {% if total_count > skip + data|length %}
+            <li class="page-item"><a class="page-link" href="{{ url_for('fetch_all_data', page=page+1) }}">Next page</a>
+            </li>
+            {% endif %}
+        </ul>
+        {% else %}
+        <h5 class="card-title"><img class="documentIcon my-auto"
+                src="{{ url_for('static', filename='img/document.png') }}"> No
+            data
+            yet!
+        </h5>
+        {% endif %}
+    </div>
+</div>

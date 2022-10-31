@@ -6,7 +6,7 @@
 <div class="row">
 
   <div class="col-lg-6 mx-auto">
-    <div class="card">
+    <div class="card shadow">
       <div class="card-body">
         <h5 class="card-title">Sign Up</h5>
         <div class="card-text mb-4 text-muted">Enter your details to create an account. We'll store a record of you in
@@ -16,7 +16,7 @@
           {{ render_field(form.username) }}
           {{ render_field(form.password) }}
           {{ render_field(form.confirm) }}
-          {{ form.submit(class="btn btn-primary") }}
+          {{ form.submit(class="btn btn-outline-dark") }}
         </form>
       </div>
     </div>

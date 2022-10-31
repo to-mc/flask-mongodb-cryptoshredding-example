@@ -44,7 +44,7 @@ def user_data():
         }
         try:
             db_queries.insert_data(document=document)
-            flash("Item added!", category="info")
+            flash("Item added!", category="success")
         except pymongo.errors.EncryptionError as ex:
             app.logger.exception(ex)
             flash("Could not add new data, no encryption key found!", category="danger")
@@ -59,7 +59,7 @@ def user_data():
         flash("Encryption failure trying to retrieve data", category="danger")
         user_data = []
 
-    return render_template("userdata.html", form=form, user_data=user_data)
+    return render_template("userdata.html", form=form, data=user_data)
 
 
 @app.route("/")
@@ -116,7 +116,7 @@ def logout():
     user = current_user.username
     logout_user()
     flash(f"User {user} logged out", category="success")
-    return redirect(url_for("login"))
+    return redirect(url_for("home"))
 
 
 @app.route("/admin")
@@ -128,6 +128,7 @@ def admin():
             "text": "Show all the data added by any user",
             "link": url_for("fetch_all_data"),
             "btnclass": "primary",
+            "submit_text": "Fetch",
         },
         {
             "title": "Delete encryption key",
@@ -137,6 +138,7 @@ def admin():
                 " data that was encrypted with the key."
             ),
             "link": url_for("shred_key"),
+            "submit_text": "Delete key",
         },
         {
             "title": "Delete user and encryption key",
@@ -146,6 +148,7 @@ def admin():
                 " they can no longer be decrypted."
             ),
             "link": url_for("delete_user_and_key"),
+            "submit_text": "Delete user & key",
         },
         {
             "title": "Delete user",
@@ -154,11 +157,13 @@ def admin():
                 " will remain, and can potentially be read as the encryption key still exists."
             ),
             "link": url_for("delete_user"),
+            "submit_text": "Delete user",
         },
         {
             "title": "Delete all data for user",
             "text": "Delete the data records added by the logged in user.",
             "link": url_for("delete_user_data"),
+            "submit_text": "Delete data",
         },
     ]
     return render_template("admin.html", actions=admin_actions)
@@ -171,7 +176,7 @@ def shred_key():
     flash(
         "Data encryption key has been deleted. Existing data will no longer be accessible once"
         " cache expires",
-        category="info",
+        category="success",
     )
     return redirect(url_for("user_data"))
 
@@ -182,7 +187,7 @@ def delete_user():
 
     flash(
         f'User: "{current_user.username}" deleted and logged out',
-        category="info",
+        category="success",
     )
     logout_user()
     return redirect(url_for("home"))
@@ -195,7 +200,7 @@ def delete_user_and_key():
 
     flash(
         f"User: {current_user.username} deleted along with their data encryption key",
-        category="info",
+        category="success",
     )
     logout_user()
     return redirect(url_for("home"))

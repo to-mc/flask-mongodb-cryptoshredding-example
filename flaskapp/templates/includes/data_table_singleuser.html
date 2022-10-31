@@ -1,0 +1,35 @@
+<div class="card shadow">
+    <div class="card-body d-flex flex-column">
+        {% if data %}
+        <h5 class="card-title pb-3 my-auto"> <img class="documentIcon"
+                src="{{ url_for('static', filename='img/document.png') }}">
+            Entered data</h5>
+        <table class="table table-bordered">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Key</th>
+                    <th>Value</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            {% for item in data %}
+            <tr>
+                <td class="align-middle">{{ item.key }}</td>
+                <td class="align-middle">{{ item.value }}</td>
+                <td class="align-middle">
+                    <form method="post" action={{ url_for('delete_single_item') }}>
+                        <input type="hidden" value={{item._id}} name="item_id" />
+                        <input type="submit" value="delete" class="btn btn-primary" />
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+        <h5 class="card-title my-auto"><img class="documentIcon"
+                src="{{ url_for('static', filename='img/document.png') }}"> No
+            data yet!
+        </h5>
+        {% endif %}
+    </div>
+</div>

@@ -11,7 +11,7 @@
         <div class="card-text pb-3">{{action.text|safe}}</div>
         <div class="btn-group-vertical mt-auto">
           <a class="btn btn-{{action.btnclass|default("danger", true)}} justify-content-center"
-            href="{{ action.link }}">Do it!</a>
+            href="{{ action.link }}">{{ action.submit_text }}</a>
         </div>
       </div>
     </div>

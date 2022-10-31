@@ -12,7 +12,7 @@ class SignUpForm(FlaskForm):
         ],
     )
     confirm = PasswordField("Repeat Password")
-    submit = SubmitField("Submit")
+    submit = SubmitField("Sign up")
 
 
 class SignInForm(FlaskForm):
@@ -24,10 +24,10 @@ class SignInForm(FlaskForm):
         ],
     )
     remember_me = BooleanField("Remember me")
-    submit = SubmitField("Log In")
+    submit = SubmitField("Login")
 
 
 class AddDataForm(FlaskForm):
     key = StringField("Key", [validators.DataRequired()])
     value = StringField("Value", [validators.DataRequired()])
-    submit = SubmitField("Submit")
+    submit = SubmitField("Add data")

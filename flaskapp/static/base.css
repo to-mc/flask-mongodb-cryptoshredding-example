@@ -31,3 +31,7 @@ table {
 .documentIcon {
     height: 50px;
 }
+
+.card {
+    border-radius: 20px;
+}

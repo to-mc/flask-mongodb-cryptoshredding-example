@@ -11,8 +11,8 @@
     <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
 </head>
 
-<body class="mb-5">
-    <nav class="navbar navbar-light navbar-expand-md justify-content-center py-2 shadow-sm">
+<body>
+    <nav class="navbar navbar-light navbar-expand-md justify-content-center py-2 shadow">
         <a href="/" class="navbar-brand w-50 mr-auto d-inline-block align-top"><img width="30"
                 src="{{ url_for('static', filename='img/leaf_logo.png') }}"><span class="header pl-4">MongoDB
                 CryptoShredding
@@ -44,12 +44,15 @@
             </ul>
         </div>
     </nav>
-    <div class="container-fluid pt-5">
+    <div class="container-fluid py-5">
         <div class="row">
             <div class="col-lg-6 mx-auto">
 
                 {% for category, message in get_flashed_messages(with_categories=True) %}
-                <div role="alert" class="alert alert-{{category}}">{{ message }}</div>
+                <div role="alert" class="alert alert-{{category}}">{{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button></div>
                 {% endfor %}
             </div>
         </div>
