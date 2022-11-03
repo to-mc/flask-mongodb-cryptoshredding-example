@@ -8,8 +8,8 @@
       <div class="card-body d-flex flex-column">
         <h5 class="card-title pb-1">Welcome!</h5>
         <div class="card-text pb-4">This application demonstrates how you can use MongoDB's <a
-            href="https://www.mongodb.com/docs/manual/core/csfle/">client side field
-            level encryption</a> to effectively "forget" customer data - even if the data gets restored by a backup
+            href="https://www.mongodb.com/docs/manual/core/csfle/">Client Side Field
+            Level Encryption</a> to effectively "forget" customer data - even if the data gets restored by a backup
           after being deleted.
         </div>
         <div class="card-text pb-4">
@@ -28,7 +28,7 @@
           data encryption key for your user. Deleting the key means the data you added can no longer be decrypted. This
           means the data can no longer be linked to your user, nor can its value be read.
         </div>
-        <div class="card-text">To get started, <a href="{{ url_for("signup") }}">sign up</a> with a user.
+        <div class="card-text">To get started, <a href="{{ url_for('signup') }}">sign up</a> with a user.
         </div>
       </div>
     </div>

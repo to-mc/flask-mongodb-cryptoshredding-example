@@ -4,8 +4,12 @@
         <h5 class="card-title pb-1"> <img class="documentIcon my-auto"
                 src="{{ url_for('static', filename='img/document.png') }}">
             Data for all users</h5>
-        <p>We tried to decrypt all the data regardless of which user it belongs to. Rows in green represent data we were
-            able to decrypt, and rows in red show data we can't decrypt as the data encryption key has been deleted.</p>
+        <p>We tried to decrypt all the data in the database using the relevant data encryption keys. Rows in green
+            represent documentswith encrypted fields that were successfully decrypted, and rows in red show documents
+            containing data we can't decrypt as the data encryption key could not be found.</p>
+        <p>For the documents we couldn't decrypt, we only see useless ciphertext for the <strong>Username</strong> and
+            <strong>Value</strong>.
+        </p>
         <table class="table table-bordered">
             <thead class="thead-dark">
                 <tr>

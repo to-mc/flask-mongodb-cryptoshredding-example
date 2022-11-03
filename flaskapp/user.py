@@ -1,6 +1,5 @@
 from datetime import datetime
 
-from bson import json_util
 from flask_login import UserMixin
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -14,7 +13,6 @@ class User(UserMixin):
         self.email = None
         self.id = id
         self.password_hash = None
-        self.dek_id = None
 
     def hash_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -25,8 +23,7 @@ class User(UserMixin):
 
     @classmethod
     def build_user_from_db(cls, user):
-        user_obj = cls(json_util.dumps(user["_id"]))
-        user_obj.dek_id = user["dek_id"]
+        user_obj = cls(str(user["_id"]))
         user_obj.username = user["username"]
         user_obj.password_hash = user["password_hash"]
         return user_obj
@@ -40,13 +37,12 @@ class User(UserMixin):
         return user_obj
 
     def save(self):
-        dek_id = db_queries.create_key(self.username)
+        db_queries.create_key(self.username)
         result = app.mongodb[db_name].user.insert_one(
             {
                 "username": self.username,
                 "password_hash": self.password_hash,
                 "email": self.email,
-                "dek_id": dek_id,
                 "createdAt": datetime.now(),
             }
         )

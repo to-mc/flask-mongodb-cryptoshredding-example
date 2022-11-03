@@ -52,7 +52,8 @@
                 <div role="alert" class="alert alert-{{category}}">{{ message }}
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
-                    </button></div>
+                    </button>
+                </div>
                 {% endfor %}
             </div>
         </div>
@@ -60,7 +61,7 @@
 
     </div>
     <script src="{{ url_for('static', filename='jquery-3.6.1.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='bootstrap.bundle.min.js') }}"></script>
 </body>
 
 </html>

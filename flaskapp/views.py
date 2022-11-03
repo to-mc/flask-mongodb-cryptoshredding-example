@@ -1,5 +1,5 @@
 import pymongo
-from bson import ObjectId, json_util
+from bson import ObjectId
 from flask import flash, redirect, render_template, request, url_for
 from flask_login import current_user, login_required, login_user, logout_user
 
@@ -10,8 +10,8 @@ from flaskapp.user import User
 
 @login_manager.user_loader
 def load_user(user_id):
-    _id = json_util.loads(user_id)
-    result = app.mongodb[db_name]["user"].find_one({"_id": _id})
+    _id = user_id
+    result = db_queries.find_user({"_id": ObjectId(_id)})
     if result:
         user = User.build_user_from_db(result)
     else:
@@ -59,7 +59,7 @@ def user_data():
         flash("Encryption failure trying to retrieve data", category="danger")
         user_data = []
 
-    return render_template("userdata.html", form=form, data=user_data)
+    return render_template("userdata.html", form=form, data=user_data, query={"test": "fail"})
 
 
 @app.route("/")
@@ -76,7 +76,7 @@ def login():
     if form.validate_on_submit():
         username = form.username.data
         password = form.password.data
-        user = app.mongodb[db_name].user.find_one({"username": username})
+        user = db_queries.find_user({"username": username})
         if user and User.validate_login(user["password_hash"], password):
             user_obj = User.build_user_from_db(user)
             login_user(user_obj, remember=form.remember_me.data)
