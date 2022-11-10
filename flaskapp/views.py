@@ -39,7 +39,7 @@ def user_data():
     form = forms.AddDataForm()
     if form.validate_on_submit():
         document = {
-            "key": form.key.data,
+            "name": form.name.data,
             "value": form.value.data,
         }
         try:

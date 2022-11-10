@@ -11,14 +11,14 @@
         <table class="table table-bordered">
             <thead class="thead-dark">
                 <tr>
-                    <th>Key</th>
+                    <th>Name</th>
                     <th>Value</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             {% for item in data %}
             <tr>
-                <td class="align-middle">{{ item.key }}</td>
+                <td class="align-middle">{{ item.name }}</td>
                 <td class="align-middle">{{ item.value }}</td>
                 <td class="align-middle">
                     <form method="post" action={{ url_for('delete_single_item') }}>

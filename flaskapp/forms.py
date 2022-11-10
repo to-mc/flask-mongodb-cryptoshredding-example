@@ -28,6 +28,6 @@ class SignInForm(FlaskForm):
 
 
 class AddDataForm(FlaskForm):
-    key = StringField("Key", [validators.DataRequired()])
-    value = StringField("Value", [validators.DataRequired()])
+    name = StringField("Name", [validators.DataRequired()], render_kw={"placeholder": "Shoe size"})
+    value = StringField("Value", [validators.DataRequired()], render_kw={"placeholder": "10"})
     submit = SubmitField("Add data")

@@ -14,14 +14,14 @@
             <thead class="thead-dark">
                 <tr>
                     <th>Username</th>
-                    <th>Key</th>
+                    <th>Name</th>
                     <th>Value</th>
                 </tr>
             </thead>
             {% for item in data %}
             <tr class="{{ 'bg-success' if item.encryption_succeeded else 'bg-danger' }}">
                 <td class="{{ 'truncate' if not item.encryption_succeeded }}">{{ item.username }}</td>
-                <td>{{ item.key }}</td>
+                <td>{{ item.name }}</td>
                 <td class="{{ 'truncate' if not item.encryption_succeeded }}">{{ item.value }}</td>
             </tr>
             {% endfor %}

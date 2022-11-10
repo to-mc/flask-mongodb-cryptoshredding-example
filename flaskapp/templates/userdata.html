@@ -17,7 +17,7 @@
         </div>
         <form method=post>
           {{ form.csrf_token }}
-          {{ render_field(form.key, autofocus=True) }}
+          {{ render_field(form.name, autofocus=True) }}
           {{ render_field(form.value) }}
           {{ form.submit(class="btn btn-outline-dark") }}
         </form>

@@ -13,6 +13,7 @@ class User(UserMixin):
         self.email = None
         self.id = id
         self.password_hash = None
+        self.dek_id = ""
 
     def hash_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -26,6 +27,7 @@ class User(UserMixin):
         user_obj = cls(str(user["_id"]))
         user_obj.username = user["username"]
         user_obj.password_hash = user["password_hash"]
+        user_obj.dek_id = user["dek_id"]
         return user_obj
 
     @classmethod
@@ -37,12 +39,13 @@ class User(UserMixin):
         return user_obj
 
     def save(self):
-        db_queries.create_key(self.username)
+        dek_id = db_queries.create_key(self.username)
         result = app.mongodb[db_name].user.insert_one(
             {
                 "username": self.username,
                 "password_hash": self.password_hash,
                 "email": self.email,
+                "dek_id": dek_id,
                 "createdAt": datetime.now(),
             }
         )
