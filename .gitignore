@@ -4,3 +4,4 @@ __pycache__
 *.pid
 
 .vscode
+README_local.md
