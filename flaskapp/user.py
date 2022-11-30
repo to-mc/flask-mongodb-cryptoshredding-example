@@ -10,7 +10,6 @@ from flaskapp.config import db_name
 class User(UserMixin):
     def __init__(self, id=""):
         self.username = None
-        self.email = None
         self.id = id
         self.password_hash = None
         self.dek_id = ""
@@ -44,7 +43,6 @@ class User(UserMixin):
             {
                 "username": self.username,
                 "password_hash": self.password_hash,
-                "email": self.email,
                 "dek_id": dek_id,
                 "createdAt": datetime.now(),
             }
