@@ -219,16 +219,6 @@ def delete_user_data():
 
 @app.route("/fetch-all-data")
 def fetch_all_data():
-    # Naive pagination implementation that will not perform well at scale
-    page_size = 20
-    page = int(request.args.get("page", 1))
-    skip = (page - 1) * page_size
-    data, total = db_queries.fetch_all_data_unencrypted(decrypt=True, skip=skip, limit=page_size)
+    data = db_queries.fetch_all_data_unencrypted(decrypt=True)
 
-    return render_template(
-        "alldata.html",
-        data=data,
-        skip=skip,
-        page=page,
-        total_count=total,
-    )
+    return render_template("alldata.html", data=data)

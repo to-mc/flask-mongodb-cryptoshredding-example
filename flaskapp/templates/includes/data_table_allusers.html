@@ -26,17 +26,6 @@
             </tr>
             {% endfor %}
         </table>
-        <p>Showing item {{ skip + 1 }}{{ ' to ' ~ (skip + data|length) if data|length > 1}} of {{ total_count }}</p>
-        <ul class="pagination pagination-sm">
-            {% if page > 1 %}
-            <li class="page-item"><a class="page-link" href="{{ url_for('fetch_all_data', page=page-1) }}">Previous
-                    page</a></li>
-            {% endif %}
-            {% if total_count > skip + data|length %}
-            <li class="page-item"><a class="page-link" href="{{ url_for('fetch_all_data', page=page+1) }}">Next page</a>
-            </li>
-            {% endif %}
-        </ul>
         {% else %}
         <h5 class="card-title"><img class="documentIcon my-auto"
                 src="{{ url_for('static', filename='img/document.png') }}"> No

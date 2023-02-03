@@ -142,18 +142,8 @@ def delete_all_data_for_user(username):
 
 
 @aws_credential_handler
-def fetch_all_data_unencrypted(decrypt=False, skip=0, limit=20):
-    query = [
-        {
-            "$facet": {
-                "data": [{"$skip": skip}, {"$limit": limit}, {"$sort": {"_id": 1}}],
-                "count": [{"$group": {"_id": None, "total": {"$sum": 1}}}],
-            }
-        }
-    ]
-    agg_result = list(app.data_collection.aggregate(query))[0]
-    total_count = agg_result["count"][0]["total"]
-    results = list(agg_result["data"])
+def fetch_all_data_unencrypted(decrypt=False):
+    results = list(app.data_collection.find())
 
     if decrypt:
         for field in ENCRYPTED_FIELDS.keys():
@@ -161,4 +151,4 @@ def fetch_all_data_unencrypted(decrypt=False, skip=0, limit=20):
                 if result.get(field):
                     result[field], result["encryption_succeeded"] = decrypt_field(result[field])
 
-    return results, total_count
+    return results
