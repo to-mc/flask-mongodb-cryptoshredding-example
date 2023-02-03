@@ -131,7 +131,7 @@ def admin():
             "submit_text": "Fetch",
         },
         {
-            "title": "Delete encryption key",
+            "title": "Delete data encryption key",
             "text": (
                 "This will delete <strong>only the encryption key</strong> for the logged in user,"
                 " and can be used to demonstrate that you will no longer be able to access your"
@@ -141,7 +141,7 @@ def admin():
             "submit_text": "Delete key",
         },
         {
-            "title": "Delete user and encryption key",
+            "title": "Delete user and data encryption key",
             "text": (
                 "Delete the record for the logged in user from the database, as well as the"
                 " related encryption key. The data records will remain, but will be unreadable as"
