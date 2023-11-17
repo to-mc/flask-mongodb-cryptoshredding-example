@@ -12,6 +12,6 @@
 
 1. [Create a symmetric KMS key](https://docs.aws.amazon.com/kms/latest/developerguide/create-keys.html#create-symmetric-cmk).
 2. [Create an AWS role that you have permissions to assume](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create_for-user.html).
-![image](./resources/create_role.png)
+![image](/resources/create_role.png)
 3. Give the role permissions for `kms:Encrypt` and `kms:Decrypt` on the kms key you created in step 1.
-![image](./resources/create_policy.png)
+![image](/resources/create_policy.png)
